@@ -3,6 +3,7 @@ import User from '../models/User.js';
 import Job from '../models/Job.js';
 import { promises as fs } from 'fs';
 import { UnauthenticatedError } from '../errors/customErrors.js';
+
 export const getCurrentUser = async (req, res) => {
   const user = await User.findOne({ _id: req.user.userId });
 
@@ -28,7 +29,7 @@ export const updateUser = async (req, res) => {
   const avatarFile = req.files['avatar'][0];
 
   if (cvFile) req.body.cv = `/uploads/${cvFile.filename}`;
-  
+
   if (avatarFile) req.body.avatar = `/uploads/${avatarFile.filename}`;
 
   const updatedUser = await User.findByIdAndUpdate(req.user.userId, req.body);
@@ -36,7 +37,7 @@ export const updateUser = async (req, res) => {
   if (cvFile && updatedUser.cv) {
     await fs.unlink(`public${updatedUser.cv}`);
   }
-  
+
   if (avatarFile && updatedUser.avatar) {
     await fs.unlink(`public${updatedUser.avatar}`);
   }

@@ -4,9 +4,13 @@ import checkPermissions from '../utils/checkPermissions.js';
 import JobPost from '../models/JobPost.js';
 
 export const getAllJobPosts = async (req, res) => {
-  const { search, jobType, sort } = req.query;
+  const { search, jobType, sort, createdBy } = req.query;
 
   const queryObject = {};
+
+  if (createdBy) {
+    queryObject.createdBy = createdBy;
+  }
 
   if (search) {
     queryObject.$or = [
@@ -74,14 +78,14 @@ export const updateJobPost = async (req, res) => {
     throw new NotFoundError(`no job post with id ${id}`);
   }
 
-  checkPermissions(req.user, job.createdBy);
+  checkPermissions(req.user, jobPost.createdBy);
 
   const updatedJobPost = await JobPost.findByIdAndUpdate(id, req.body, {
     new: true,
     runValidators: true,
   });
 
-  res.status(StatusCodes.OK).json({ job: updatedJobPost });
+  res.status(StatusCodes.OK).json({ jobPost: updatedJobPost });
 };
 
 export const deleteJobPost = async (req, res) => {
@@ -96,5 +100,5 @@ export const deleteJobPost = async (req, res) => {
 
   const removedJob = await JobPost.findByIdAndDelete(id);
 
-  res.status(StatusCodes.OK).json({ job: removedJob });
+  res.status(StatusCodes.OK).json({ jobPost: removedJob });
 };

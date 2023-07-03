@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { ACCOUNT_ROLE } from '../utils/constants.js';
 
 const UserSchema = new mongoose.Schema({
   name: String,
@@ -14,8 +15,8 @@ const UserSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['user', 'admin', 'hr'],
-    default: 'user',
+    enum: Object.values(ACCOUNT_ROLE),
+    default: ACCOUNT_ROLE.CANDIDATE,
   },
   avatar: String,
   cv: String,
@@ -24,6 +25,7 @@ const UserSchema = new mongoose.Schema({
 UserSchema.methods.toJSON = function () {
   var obj = this.toObject();
   delete obj.password;
+
   return obj;
 };
 

@@ -1,4 +1,4 @@
-export const JOB_STATUS = {
+export const JOB_APPLICATION_STATUS = {
   PENDING: 'pending',
   INTERVIEW: 'interview',
   DECLINED: 'declined',
@@ -13,6 +13,7 @@ export const JOB_TYPE = {
 export const ACCOUNT_ROLE = {
   HR: 'hr',
   CANDIDATE: 'candidate',
+  ADMIN: 'admin',
 };
 
 export const JOB_SORT_BY = {
@@ -20,9 +21,4 @@ export const JOB_SORT_BY = {
   OLDEST_FIRST: 'oldest',
   ASCENDING: 'a-z',
   DESCENDING: 'z-a',
-};
-
-export const USER_ROLE = {
-  HR: 'hr',
-  CANDIDATE: 'candidate',
 };

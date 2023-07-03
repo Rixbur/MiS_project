@@ -16,7 +16,7 @@ import path from 'path';
 import jobRouter from './routers/jobRouter.js';
 import authRouter from './routers/authRouter.js';
 import userRouter from './routers/userRouter.js';
-import jobPostRouter from './routers/jobPostRouter.js';
+import jobApplicationRouter from './routers/jobApplicationRouter.js';
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
 import { authenticateUser } from './middleware/authMiddleware.js';
 
@@ -44,9 +44,9 @@ app.get('/api/v1/test', (req, res) => {
 });
 
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/jobs', authenticateUser, jobRouter);
+app.use('/api/v1/job', authenticateUser, jobRouter);
 app.use('/api/v1/users', authenticateUser, userRouter);
-app.use('/api/v1/job-posts', authenticateUser, jobPostRouter);
+app.use('/api/v1/job-applications', authenticateUser, jobApplicationRouter);
 
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, './public', 'index.html'));

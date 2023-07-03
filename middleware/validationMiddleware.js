@@ -1,5 +1,5 @@
 import { body, validationResult, param, query } from 'express-validator';
-import { JOB_SORT_BY, JOB_STATUS, JOB_TYPE } from '../utils/constants.js';
+import { JOB_SORT_BY, JOB_TYPE } from '../utils/constants.js';
 import { BadRequestError } from '../errors/customErrors.js';
 import User from '../models/User.js';
 import mongoose from 'mongoose';
@@ -32,23 +32,6 @@ const validateTest = withValidationErrors([
 ]);
 
 const validateJobInput = withValidationErrors([
-  body('company').notEmpty().withMessage('company is required'),
-  body('position').notEmpty().withMessage('position is required'),
-  body('jobLocation')
-    .optional()
-    .notEmpty()
-    .withMessage('job location is required'),
-  body('jobStatus')
-    .optional()
-    .isIn(Object.values(JOB_STATUS))
-    .withMessage('invalid status value'),
-  body('jobType')
-    .optional()
-    .isIn(Object.values(JOB_TYPE))
-    .withMessage('invalid job type'),
-]);
-
-const validateJobPostInput = withValidationErrors([
   body('company').notEmpty().withMessage('company is required'),
   body('position').notEmpty().withMessage('position is required'),
   body('jobLocation')
@@ -151,10 +134,6 @@ const validateGetAllJobsParams = withValidationErrors([
     .withMessage('search value required')
     .isString()
     .withMessage('search value must be a string'),
-  query('jobStatus')
-    .optional()
-    .isIn(['all', ...Object.values(JOB_STATUS)])
-    .withMessage('invalid job status'),
   query('jobType')
     .optional()
     .isIn(['all', ...Object.values(JOB_TYPE)])
@@ -166,33 +145,27 @@ const validateGetAllJobsParams = withValidationErrors([
   query('page').optional().isInt({ min: 1 }).withMessage('invalid page value'),
 ]);
 
-const validateGetAllJobPostParams = withValidationErrors([
-  query('search')
+const validateCustomApplicationInput = withValidationErrors([
+  body('status').notEmpty().withMessage('status is required'),
+  body('company').notEmpty().withMessage('company is required'),
+  body('position').notEmpty().withMessage('position is required'),
+  body('jobLocation')
     .optional()
-    .trim()
     .notEmpty()
-    .withMessage('search value required')
-    .isString()
-    .withMessage('search value must be a string'),
-  query('jobType')
+    .withMessage('job location is required'),
+  body('jobType')
     .optional()
-    .isIn(['all', ...Object.values(JOB_TYPE)])
+    .isIn(Object.values(JOB_TYPE))
     .withMessage('invalid job type'),
-  query('sort')
-    .optional()
-    .isIn([...Object.values(JOB_SORT_BY)])
-    .withMessage('invalid sort value'),
-  query('page').optional().isInt({ min: 1 }).withMessage('invalid page value'),
 ]);
 
 export {
   validateTest,
   validateJobInput,
-  validateJobPostInput,
   validateIdParam,
   validateRegisterInput,
   validateLoginInput,
   validateGetAllJobsParams,
-  validateGetAllJobPostParams,
   validateUpdateUserInput,
+  validateCustomApplicationInput,
 };

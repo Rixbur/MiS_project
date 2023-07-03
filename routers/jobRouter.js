@@ -1,14 +1,13 @@
 import { Router } from 'express';
 const router = Router();
 
-import checkForDemoUser from '../middleware/checkForDemoUser.js';
 import {
-  getAllJobs,
-  getJob,
+  getAllOpenJobs,
+  getAllJobsByCreatorId,
+  getJobById,
   createJob,
   updateJob,
   deleteJob,
-  showStats,
 } from '../controllers/jobController.js';
 import {
   validateJobInput,
@@ -16,17 +15,20 @@ import {
   validateGetAllJobsParams,
 } from '../middleware/validationMiddleware.js';
 
+// /api/v1/jobs
 router
   .route('/')
-  .get(validateGetAllJobsParams, getAllJobs)
-  .post(checkForDemoUser, validateJobInput, createJob);
+  .get(validateGetAllJobsParams, getAllOpenJobs)
+  .post(validateJobInput, createJob);
 
-router.route('/stats').get(showStats);
+// /api/v1/jobs/my-jobs
+router.route('/my-jobs').get(getAllJobsByCreatorId);
 
+// /api/v1/jobs/:id
 router
   .route('/:id')
-  .get(validateIdParam, getJob)
-  .patch(checkForDemoUser, validateIdParam, validateJobInput, updateJob)
-  .delete(checkForDemoUser, validateIdParam, deleteJob);
+  .get(validateIdParam, getJobById)
+  .patch(validateIdParam, validateJobInput, updateJob)
+  .delete(validateIdParam, deleteJob);
 
 export default router;

@@ -60,6 +60,7 @@ const Dashboard = ({ prefersDarkMode }) => {
     (error) => {
       if (error?.response?.status === 401) {
         logoutUser();
+
         return;
       }
       return Promise.reject(error);

@@ -9,7 +9,7 @@ import {
   Link,
   useRouteError,
 } from 'react-router-dom';
-import { USER_ROLE } from '../../../utils/constants';
+import { ACCOUNT_ROLE } from '../../../utils/constants';
 
 export const action = async ({ request }) => {
   const formData = await request.formData();
@@ -44,8 +44,8 @@ const Register = () => {
         <FormRowSelect
           labelText="Role"
           name="role"
-          defaultValue={USER_ROLE.CANDIDATE}
-          list={Object.values(USER_ROLE)}
+          defaultValue={ACCOUNT_ROLE.CANDIDATE}
+          list={Object.values(ACCOUNT_ROLE)}
         />
         <button type="submit" className="btn btn-block" disabled={isSubmitting}>
           {isSubmitting ? 'submitting...' : 'submit'}

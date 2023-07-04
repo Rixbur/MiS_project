@@ -7,8 +7,10 @@ import {
   getAllCustomJobApplications,
   getAllJobApplications,
   hrUpdateJobApplication,
+  getCustomJobApplicationById,
   updateCustomApplication,
   deleteJobApplicationById,
+  showStats,
 } from '../controllers/jobApplicantController.js';
 import { validateCustomApplicationInput } from '../middleware/validationMiddleware.js';
 
@@ -27,7 +29,10 @@ router
 // /api/v1/job-applications/custom/:id
 router
   .route('/custom/:id')
+  .get(getCustomJobApplicationById)
   .patch(updateCustomApplication)
   .delete(deleteJobApplicationById);
+
+router.route('/stats').get(showStats);
 
 export default router;

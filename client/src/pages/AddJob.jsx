@@ -1,7 +1,7 @@
 import { FormRow, FormRowSelect } from '../components';
 import Wrapper from '../assets/wrappers/DashboardFormPage';
 import { useOutletContext } from 'react-router-dom';
-import { JOB_STATUS, JOB_TYPE } from '../../../utils/constants';
+import { JOB_APPLICATION_STATUS, JOB_TYPE } from '../../../utils/constants';
 import { Form, useNavigation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import customFetch from '../utils/customFetch';
@@ -11,11 +11,12 @@ export const action = async ({ request }) => {
   const data = Object.fromEntries(formData);
 
   try {
-    await customFetch.post('/jobs', data);
+    await customFetch.post('/job-applications/custom', data);
     toast.success('Job added successfully');
   } catch (error) {
     toast.error(error.response.data.msg);
   }
+
   return null;
 };
 
@@ -39,9 +40,9 @@ const AddJob = () => {
           />
           <FormRowSelect
             labelText="job status"
-            name="jobStatus"
-            defaultValue={JOB_STATUS.PENDING}
-            list={Object.values(JOB_STATUS)}
+            name="status"
+            defaultValue={JOB_APPLICATION_STATUS.PENDING}
+            list={Object.values(JOB_APPLICATION_STATUS)}
           />
           <FormRowSelect
             name="jobType"

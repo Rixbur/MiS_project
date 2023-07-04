@@ -20,9 +20,28 @@ export const loader = async ({ request }) => {
       params.search = search;
     }
 
-    const { data } = await customFetch.get('/jobs', {
+    let { data } = await customFetch.get('/job-applications/custom', {
       params,
     });
+
+    // const jobs = data.data.jobs.map((job) => {
+    console.log(data.myJobApplications);
+
+    const jobs = data.myJobApplications.map((application) => {
+      const job = {
+        _id: application._id,
+        jobStatus: application.status,
+        jobType: application.jobId.jobType,
+        company: application.jobId.company,
+        position: application.jobId.position,
+        jobLocation: application.jobId.jobLocation,
+      };
+      return job;
+    });
+
+    data = {
+      jobs,
+    };
 
     return {
       data,

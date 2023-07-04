@@ -2,13 +2,7 @@ import { Logo, FormRow } from '../components';
 import Wrapper from '../assets/wrappers/RegisterAndLoginPage';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import {
-  Form,
-  Link,
-  redirect,
-  useNavigation,
-  useNavigate,
-} from 'react-router-dom';
+import { Form, Link, redirect, useNavigation } from 'react-router-dom';
 
 export const action = async ({ request }) => {
   const formData = await request.formData();
@@ -29,21 +23,6 @@ export const action = async ({ request }) => {
 const Login = () => {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === 'submitting';
-  const navigate = useNavigate();
-  const loginDemoUser = async () => {
-    const data = {
-      email: 'test@test.com',
-      password: 'secret123',
-    };
-
-    try {
-      await axios.post('/api/v1/auth/login', data);
-      toast.success('take a test drive');
-      navigate('/dashboard');
-    } catch (error) {
-      toast.error(error?.response?.data?.msg);
-    }
-  };
 
   return (
     <Wrapper>
@@ -54,9 +33,6 @@ const Login = () => {
         <FormRow type="password" name="password" />
         <button type="submit" className="btn btn-block" disabled={isSubmitting}>
           {isSubmitting ? 'submitting...' : 'submit'}
-        </button>
-        <button type="button" onClick={loginDemoUser} className="btn btn-block">
-          {isSubmitting ? 'submitting...' : 'explore the app'}
         </button>
         <p>
           Already a member?

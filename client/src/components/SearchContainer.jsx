@@ -1,7 +1,11 @@
 import { FormRow, FormRowSelect } from '.';
 import Wrapper from '../assets/wrappers/DashboardFormPage';
 import { Form, useSubmit, Link } from 'react-router-dom';
-import { JOB_TYPE, JOB_STATUS, JOB_SORT_BY } from '../../../utils/constants';
+import {
+  JOB_TYPE,
+  JOB_APPLICATION_STATUS,
+  JOB_SORT_BY,
+} from '../../../utils/constants';
 import { useAllJobsContext } from '../pages/AllJobs';
 const SearchContainer = () => {
   const { searchValues } = useAllJobsContext();
@@ -20,31 +24,31 @@ const SearchContainer = () => {
   };
   return (
     <Wrapper>
-      <Form className='form'>
-        <h5 className='form-title'>search form</h5>
-        <div className='form-center'>
+      <Form className="form">
+        <h5 className="form-title">search form</h5>
+        <div className="form-center">
           {/* search position */}
 
           <FormRow
-            type='search'
-            name='search'
+            type="search"
+            name="search"
             defaultValue={search}
             onChange={debounce((form) => {
               submit(form);
             })}
           />
           <FormRowSelect
-            labelText='job status'
-            name='jobStatus'
-            list={['all', ...Object.values(JOB_STATUS)]}
+            labelText="job status"
+            name="jobStatus"
+            list={['all', ...Object.values(JOB_APPLICATION_STATUS)]}
             defaultValue={jobStatus}
             onChange={(e) => {
               submit(e.currentTarget.form);
             }}
           />
           <FormRowSelect
-            labelText='job type'
-            name='jobType'
+            labelText="job type"
+            name="jobType"
             defaultValue={jobType}
             list={['all', ...Object.values(JOB_TYPE)]}
             onChange={(e) => {
@@ -52,14 +56,14 @@ const SearchContainer = () => {
             }}
           />
           <FormRowSelect
-            name='sort'
+            name="sort"
             defaultValue={sort || JOB_SORT_BY.NEWEST}
             list={[...Object.values(JOB_SORT_BY)]}
             onChange={(e) => {
               submit(e.currentTarget.form);
             }}
           />
-          <Link to='/dashboard/all-jobs' className='btn form-btn delete-btn'>
+          <Link to="/dashboard/all-jobs" className="btn form-btn delete-btn">
             Reset Search Values
           </Link>
         </div>

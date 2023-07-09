@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 const FormRowSelect = ({
   name,
   labelText,
@@ -6,14 +7,14 @@ const FormRowSelect = ({
   onChange,
 }) => {
   return (
-    <div className='form-row'>
-      <label htmlFor={name} className='form-label'>
+    <div className="form-row">
+      <label htmlFor={name} className="form-label">
         {labelText || name}
       </label>
       <select
         name={name}
         id={name}
-        className='form-select'
+        className="form-select"
         defaultValue={defaultValue}
         onChange={onChange}
       >

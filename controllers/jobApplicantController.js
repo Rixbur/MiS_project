@@ -64,9 +64,9 @@ export const getAllJobApplications = async (req, res) => {
   if (req.body.jobId) queryObject.jobId = req.body.jobId;
   if (req.body.applicantId) queryObject.applicantId = req.body.applicantId;
 
-  const jobApplications = await JobApplication.find(queryObject).populate(
-    'jobId'
-  );
+  const jobApplications = await JobApplication.find(queryObject)
+    .populate('jobId')
+    .populate('applicantId');
 
   res.status(StatusCodes.OK).json({ jobApplications });
 };

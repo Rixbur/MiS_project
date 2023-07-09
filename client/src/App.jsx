@@ -20,6 +20,7 @@ import { loader as dashboardLoader } from './pages/DashboardLayout';
 import { loader as allJobsLoader } from './pages/AllJobs';
 import { loader as myJobsLoader } from './pages/MyJobPosts';
 import { loader as viewApplicationLoader } from './pages/ViewApplications';
+import { loader as openJobsLoader } from './pages/AllOpenPositions';
 import { action as addJobAction } from './pages/AddJob';
 import { action as postJobAction } from './pages/PostJob';
 import { action as deleteJobAction } from './pages/DeleteJob';
@@ -33,6 +34,7 @@ import { action as profileAction } from './pages/Profile';
 import PostJob from './pages/PostJob';
 import MyJobPosts from './pages/MyJobPosts';
 import ViewApplications from './pages/ViewApplications';
+import AllOpenPositions from './pages/AllOpenPositions';
 
 const getInitialDarkMode = () => {
   const prefersDarkMode = window.matchMedia(
@@ -92,6 +94,11 @@ const router = createBrowserRouter([
             path: 'view-applications/:id',
             loader: viewApplicationLoader,
             element: <ViewApplications />,
+          },
+          {
+            path: 'open-jobs',
+            loader: openJobsLoader,
+            element: <AllOpenPositions />,
           },
           { path: 'stats', element: <Stats />, loader: statsLoader },
           {

@@ -7,8 +7,6 @@ import { toast } from 'react-toastify';
 import customFetch from '../utils/customFetch';
 
 export const loader = async ({ params }) => {
-  console.log(params.id);
-
   try {
     let { data } = await customFetch.get(
       `/job-applications/custom/${params.id}`

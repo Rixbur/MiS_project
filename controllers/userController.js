@@ -7,7 +7,6 @@ import { UnauthenticatedError } from '../errors/customErrors.js';
 export const getCurrentUser = async (req, res) => {
   const user = await User.findOne({ _id: req.user.userId });
 
-  console.log('current user: ', user);
   if (!user) throw new UnauthenticatedError('invalid credentials');
 
   const userWithoutPassword = user.toJSON();

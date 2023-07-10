@@ -8,7 +8,6 @@ const storage = multer.diskStorage({
     cb(null, 'public/uploads');
   },
   filename: (req, file, cb) => {
-    console.log(req.body)
     const fileName = `${Date.now()}-${file.originalname}`;
     // set the name of the uploaded file
     cb(null, fileName);
@@ -36,7 +35,10 @@ router.get('/admin/app-stats', [
 
 router.patch('/update-user', [
   checkForDemoUser,
-  upload.fields([{ name: 'avatar', maxCount: 1 }, { name: 'cv', maxCount: 1 }]),
+  upload.fields([
+    { name: 'avatar', maxCount: 1 },
+    { name: 'cv', maxCount: 1 },
+  ]),
   validateUpdateUserInput,
   updateUser,
 ]);

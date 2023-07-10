@@ -75,7 +75,6 @@ export const getAllCustomJobApplications = async (req, res) => {
   const queryObject = {};
   const { applicantId } = req.user.userId;
   const { search, jobType, jobStatus } = req.query;
-  console.log(req.query);
 
   if (applicantId) queryObject.applicantId = applicantId;
 
@@ -108,8 +107,6 @@ export const getAllCustomJobApplications = async (req, res) => {
     });
   }
 
-  console.log('filter by regex kao', myJobApplications);
-
   if (jobStatus && jobStatus !== 'all') {
     myJobApplications = myJobApplications.filter((jobApplication) => {
       const jobPostStatus = jobApplication.status.toLowerCase();
@@ -120,7 +117,6 @@ export const getAllCustomJobApplications = async (req, res) => {
       return jobPostStatus == jobStatusQuery;
     });
   }
-  console.log(myJobApplications);
 
   if (jobType && jobType !== 'all') {
     myJobApplications = myJobApplications.filter((jobApplication) => {

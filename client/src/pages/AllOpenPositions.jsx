@@ -21,7 +21,6 @@ export const loader = async () => {
 
 const AllOpenPositions = () => {
   const { data, user } = useLoaderData();
-  console.log(user);
 
   return (
     <Wrapper>

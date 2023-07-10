@@ -14,8 +14,6 @@ export const loader = async ({ params }) => {
       jobId: params.id,
     });
 
-    console.log(data);
-
     return {
       data,
     };

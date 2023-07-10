@@ -20,8 +20,6 @@ export const loader = async () => {
 const MyJobPosts = () => {
   const { data } = useLoaderData();
 
-  console.log(data);
-
   return (
     <Wrapper>
       <div className="jobs">

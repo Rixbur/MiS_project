@@ -21,8 +21,6 @@ export const loader = async ({ request }) => {
       params,
     });
 
-    console.log(data.jobs);
-
     const jobs = data.jobs.map((job) => {
       const jb = {
         _id: job._id,

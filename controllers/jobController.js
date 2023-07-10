@@ -1,92 +1,70 @@
 import Job from '../models/Job.js';
+import JobApplication from '../models/JobApplication.js';
+import User from '../models/User.js';
 import { StatusCodes } from 'http-status-codes';
 import { NotFoundError, UnauthenticatedError } from '../errors/customErrors.js';
 import checkPermissions from '../utils/checkPermissions.js';
 import { ACCOUNT_ROLE } from '../utils/constants.js';
 
 export const getAllOpenJobs = async (req, res) => {
-  const { search, jobType, sort } = req.query;
-
-  if (search) {
-    queryObject.$or = [
-      { position: { $regex: search, $options: 'i' } },
-      { company: { $regex: search, $options: 'i' } },
-    ];
-  }
-
-  if (jobType && jobType !== 'all') queryObject.jobType = jobType;
-
-  const sortOptions = {
-    newest: '-createdAt',
-    oldest: 'createdAt',
-    'a-z': 'position',
-    'z-a': '-position',
+  const queryNotMyJobs = {
+    createdBy: { $ne: req.user.userId },
   };
 
-  const sortKey = sortOptions[sort] || sortOptions.newest;
+  const jobs = await Job.find(queryNotMyJobs);
+  const applications = await JobApplication.find({
+    applicantId: req.user.userId,
+  }).populate('jobId');
 
-  const jobs = await Job.aggregate([
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'createdBy',
-        foreignField: '_id',
-        as: 'createdBy',
-      },
-    },
-    {
-      $unwind: '$createdBy',
-    },
-    {
-      $match: {
-        'createdBy.role': 'hr',
-        'createdBy._id': { $ne: req.user.userId },
-      },
-    },
-    {
-      $sort: { [sortKey]: -1 },
-    },
-  ]).exec();
+  if (!jobs) throw new NotFoundError('Failed to find open jobs');
 
-  if (!jobs) throw new NotFoundError('Failed to find jobs');
+  const notApplied = jobs.filter((job) => {
+    const jcID = job.createdBy.toString();
+    const isCreatorHr = User.findById(jcID).role === ACCOUNT_ROLE.HR;
 
-  const filteredJobs = jobs.filter((job) => {
-    const jcID = job.createdBy._id.toString();
+    if (isCreatorHr) return false;
 
-    return jcID !== req.user.userId;
+    const hasApplied = applications.some((application) => {
+      const jobID = application.jobId._id.toString();
+
+      return jobID === job._id.toString();
+    });
+
+    if (hasApplied) return false;
+
+    return true;
   });
 
-  res.status(StatusCodes.OK).json({ jobs: filteredJobs });
+  res.status(StatusCodes.OK).json({ jobs: notApplied });
 };
 
 export const getAllJobsByCreatorId = async (req, res) => {
-  const { search, jobType, sort } = req.query;
-
   const queryObject = {
     createdBy: req.user.userId,
   };
 
-  if (search) {
-    queryObject.$or = [
-      { position: { $regex: search, $options: 'i' } },
-      { company: { $regex: search, $options: 'i' } },
-    ];
-  }
+  const jobs = await Job.find(queryObject);
+  const applications = await JobApplication.find({
+    applicantId: req.user.userId,
+  }).populate('jobId');
 
-  if (jobType && jobType !== 'all') queryObject.jobType = jobType;
+  if (!jobs) throw new NotFoundError('Failed to find jobs');
 
-  const sortOptions = {
-    newest: '-createdAt',
-    oldest: 'createdAt',
-    'a-z': 'position',
-    'z-a': '-position',
-  };
+  const filteredJobs = jobs.filter((job) => {
+    const jcID = job.createdBy.toString();
 
-  const sortKey = sortOptions[sort] || sortOptions.newest;
+    const hasApplied = applications.some((application) => {
+      const jobID = application.jobId._id.toString();
 
-  const jobs = await Job.find(queryObject).sort(sortKey);
+      return jobID === job._id.toString();
+    });
 
-  res.status(StatusCodes.OK).json({ jobs });
+    if (hasApplied) return false;
+
+    return true;
+  });
+
+  res.status(StatusCodes.OK).json({ jobs: filteredJobs });
 };
 
 export const createJob = async (req, res) => {

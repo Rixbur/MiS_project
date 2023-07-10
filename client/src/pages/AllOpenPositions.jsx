@@ -25,6 +25,11 @@ const AllOpenPositions = () => {
 
   return (
     <Wrapper>
+      {data.jobs.length > 0 ? (
+        <h5>{data.jobs.length} open positions found</h5>
+      ) : (
+        <h5>No open positions found</h5>
+      )}
       <div className="jobs">
         {data.jobs.map((job) => {
           const { _id, position, company, jobType, jobLocation } = job;
